@@ -1,40 +1,41 @@
+const yargs = require("yargs");
+const {hideBin} = require("yargs/helpers");
+
+
 const contactsOperations = require('./contacts');
 
 async function invokeAction({ action, id, name, email, phone }){
     switch(action) {
         case "list":
-            const contacts = await contactsOperations.list();
+            const contacts = await contactsOperations.listContacts();
             console.log(contacts);
             break;
         case "get":
-            const contact = await contactsOperations.get(id);
+            const contact = await contactsOperations.getContactById(id);
             if (!contact) {
                 throw new Error(`Product with id=${id} not found`);
             };
             console.log(contact);
             break;
         case "add":
-            await contactsOperations.add(name, email, phone);
+            const newContact = await contactsOperations.addContact(name, phone, email);
+            console.log(newContact);
             break;
         case "remove":
-            await contactsOperations.removeContact(id);
+            const removeContact = await contactsOperations.removeContact(id);
+            console.log(removeContact);
             break;
         default:
-            console.log("Unknown action")
+            console.warn('\x1B[31m Unknown action type!');
     }
 }
 
-// invokeAction({ action: 'listContacts' })
+const arr = hideBin(process.argv);
 
-// invokeAction({action:'getContactById', id: '5' })
+const {argv} = yargs(arr)
 
-// invokeAction({
-//     action: 'addContact',
-//     name: 'John Rambo',
-//     email: "johnrambo@mail.com",
-//     phone: "(826) 145-8756"
-// })
 
-invokeAction({action: 'remove', id: 'bb8b7834-9cc5-4dc0-a1f3-501f15888b8c'})
+invokeAction(argv)
+
 
 

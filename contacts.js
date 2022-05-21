@@ -13,7 +13,7 @@ async function listContacts() {
 
 async function getContactById(contactId) {
   const contacts = await listContacts();
-  const contact = contacts.find(constant => constant.id === contactId);
+  const contact = contacts.find(constant => constant.id == contactId);
   return contact ? contact : null;
 }
 
@@ -28,11 +28,12 @@ async function addContact(name, email, phone) {
   contacts.push(newContact);
 
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  return newContact;
 }
 
 async function removeContact(contactId) {
   const contacts = await listContacts();
-  const index = contacts.findIndex(contact => contact.id === contactId);
+  const index = contacts.findIndex(contact => contact.id == contactId);
 
   const removeContact = contacts[index];
   if(index !== -1) {
